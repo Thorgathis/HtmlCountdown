@@ -16,7 +16,7 @@ body {
     align-items: center;
     flex-wrap: row;
     height: 100vh;
-    font-family: Century Gothic;
+    font-family: sans-serif;
     background-color: #202629;
     margin: 0;
 }
