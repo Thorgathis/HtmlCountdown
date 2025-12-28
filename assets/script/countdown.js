@@ -1,5 +1,22 @@
 const $ = (elem) => document.querySelector(elem);
 
+const pluralRu = (n, forms) => {
+    const num = Math.abs(Number(n)) % 100;
+    const n1 = num % 10;
+    if (num > 10 && num < 20) return forms[2];
+    if (n1 > 1 && n1 < 5) return forms[1];
+    if (n1 === 1) return forms[0];
+    return forms[2];
+};
+
+const resolveWord = (wordConfig, value) => {
+    if (typeof wordConfig === "function") return wordConfig(value);
+    if (Array.isArray(wordConfig) && wordConfig.length >= 3) {
+        return pluralRu(value, wordConfig);
+    }
+    return wordConfig ?? "";
+};
+
 const countdown = function (_config) {
     const tarDate = $(_config.target).getAttribute("data-date").split("-");
     const day = parseInt(tarDate[0]);
@@ -39,10 +56,10 @@ const countdown = function (_config) {
         0
     ).getTime();
 
-    $(_config.target + " .day .word").innerHTML = _config.dayWord;
-    $(_config.target + " .hour .word").innerHTML = _config.hourWord;
-    $(_config.target + " .min .word").innerHTML = _config.minWord;
-    $(_config.target + " .sec .word").innerHTML = _config.secWord;
+    const dayWordEl = $(_config.target + " .day .word");
+    const hourWordEl = $(_config.target + " .hour .word");
+    const minWordEl = $(_config.target + " .min .word");
+    const secWordEl = $(_config.target + " .sec .word");
 
     const updateTime = () => {
         const now = new Date().getTime();
@@ -62,6 +79,11 @@ const countdown = function (_config) {
         $(_config.target + " .hour .num").innerHTML = addZero(hours);
         $(_config.target + " .min .num").innerHTML = addZero(minutes);
         $(_config.target + " .sec .num").innerHTML = addZero(seconds);
+
+        if (dayWordEl) dayWordEl.innerHTML = resolveWord(_config.dayWord, days);
+        if (hourWordEl) hourWordEl.innerHTML = resolveWord(_config.hourWord, hours);
+        if (minWordEl) minWordEl.innerHTML = resolveWord(_config.minWord, minutes);
+        if (secWordEl) secWordEl.innerHTML = resolveWord(_config.secWord, seconds);
 
         if (distance < 0) {
             $("#countdown").innerHTML =

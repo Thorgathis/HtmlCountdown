@@ -62,3 +62,58 @@ h1 {
     font-size: 2.5vw;
     color: #8a99ab;
 }
+
+.holiday-snow {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1010;
+    opacity: 0;
+}
+
+.holiday-snow.holiday-snow--ready {
+    opacity: 1;
+}
+
+.holiday-snowflake {
+    --size: 6px;
+    --duration: 14s;
+    --delay: 0s;
+    --drift: 0px;
+    --scale: 1;
+    position: absolute;
+    top: -10vh;
+    left: 0;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.85);
+    opacity: 0;
+    animation: holidaySnowFall var(--duration) linear forwards;
+    animation-delay: var(--delay);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.35));
+}
+
+@keyframes holidaySnowFall {
+    0% {
+        transform: translate3d(0, -15vh, 0) scale(var(--scale));
+        opacity: 0;
+    }
+    2% {
+        opacity: 0.9;
+    }
+    98% {
+        opacity: 0.9;
+    }
+    100% {
+        transform: translate3d(var(--drift), 110vh, 0) scale(var(--scale));
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .holiday-snowflake {
+        animation: none;
+    }
+}
